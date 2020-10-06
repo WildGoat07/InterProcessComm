@@ -97,7 +97,7 @@ namespace Interprocomm
         /// <summary>
         /// Send a request to the server
         /// </summary>
-        /// <param name="data">The formatted data sent to the server</param>
+        /// <param name="stringData">The formatted data sent to the server</param>
         /// <returns>The response from the server, or null if no response has be sent.</returns>
         /// <exception cref="InvalidOperationException">
         /// Thrown if calling this when the client is not connected.

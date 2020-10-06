@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Interprocomm</name>
+    </assembly>
+    <members>
+        <member name="T:Interprocomm.Client">
+            <summary>
+            Class used as the client of the application. It will send requests to the server and get
+            back responses from it if needed.
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Client.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="key">
+            Key used to sync the server and the client. It must match the one used for the server.
+            </param>
+        </member>
+        <member name="P:Interprocomm.Client.Connected">
+            <summary>
+            Returns true if currently connected to a server.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Client.Key">
+            <summary>
+            Returns the key used to connect to the server.
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Client.Disconnect">
+            <summary>
+            Disconnects the client from the server. Same as Dispose()
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Client.Dispose">
+            <summary>
+            Disposes the client. Same as Disconnect()
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Client.SendRequest(System.Byte[])">
+            <summary>
+            Send a request to the server
+            </summary>
+            <param name="data">The data sent to the server</param>
+            <returns>The response from the server, or null if no response has be sent.</returns>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown if calling this when the client is not connected.
+            </exception>
+        </member>
+        <member name="M:Interprocomm.Client.SendRequest(System.String)">
+            <summary>
+            Send a request to the server
+            </summary>
+            <param name="stringData">The formatted data sent to the server</param>
+            <returns>The response from the server, or null if no response has be sent.</returns>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown if calling this when the client is not connected.
+            </exception>
+        </member>
+        <member name="M:Interprocomm.Client.Start">
+            <summary>
+            Starts the client and connects it to the server, or waits until a connection can be done.
+            </summary>
+        </member>
+        <member name="T:Interprocomm.Request">
+            <summary>
+            A request sent by the client.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Request.Data">
+            <summary>
+            The raw content of the response.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Request.StringData">
+            <summary>
+            A formatted version of the content. It may not work depending of the raw content, if the
+            request was not meant to be formatted.
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Request.Respond(System.Byte[])">
+            <summary>
+            Respond to the request with data.
+            </summary>
+            <param name="data">data to respond or null for no response.</param>
+        </member>
+        <member name="M:Interprocomm.Request.Respond(System.String)">
+            <summary>
+            Respond to the request with formatted data.
+            </summary>
+            <param name="stringData">string to respond.</param>
+        </member>
+        <member name="T:Interprocomm.Response">
+            <summary>
+            A response from the server after sending a request.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Response.Data">
+            <summary>
+            The raw content of the response.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Response.StringData">
+            <summary>
+            A formatted version of the content. It may not work depending of the raw content, if the
+            response was not meant to be formatted.
+            </summary>
+        </member>
+        <member name="T:Interprocomm.Server">
+            <summary>
+            Class used as the server of the application. It will recieve requests from the client
+            application and send back a response if needed.
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Server.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="key">
+            Key used to sync the server and the client. It must match the one used for the client.
+            </param>
+        </member>
+        <member name="E:Interprocomm.Server.ClientConnected">
+            <summary>
+            Event triggered when a client is connected.
+            </summary>
+        </member>
+        <member name="E:Interprocomm.Server.ClientDisconnected">
+            <summary>
+            Event triggered when a client is disconnected.
+            </summary>
+        </member>
+        <member name="E:Interprocomm.Server.RequestRecieved">
+            <summary>
+            Event triggered when the client sent a request.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Server.Connected">
+            <summary>
+            Returns true if the server is connected with a client.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Server.Key">
+            <summary>
+            The key used for the server and the client
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Server.Open">
+            <summary>
+            Returns true if the server is started and connected/ready to be connected
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Server.Close">
+            <summary>
+            Closes the server. The Start() method will end and needs to be recalled to reuse the
+            server. Same as Dispose()
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Server.Dispose">
+            <summary>
+            Dispose the server. Same as Close()
+            </summary>
+        </member>
+        <member name="M:Interprocomm.Server.Start">
+            <summary>
+            Starts the server. Can only be started once. Method stopped when calling Close() or Dispose().
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
