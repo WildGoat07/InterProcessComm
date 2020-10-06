@@ -4,22 +4,21 @@ using System.IO.Pipes;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interprocomm.Server
+namespace Interprocomm
 {
     public class Server : IDisposable
     {
         #region Private Fields
 
+        private bool closed;
+        private bool connected;
         private NamedPipeServerStream serverStream;
 
         #endregion Private Fields
 
         #region Public Constructors
 
-        public Server(string key)
-        {
-            Key = key;
-        }
+        public Server(string key) => Key = key;
 
         #endregion Public Constructors
 
@@ -35,14 +34,21 @@ namespace Interprocomm.Server
 
         #region Public Properties
 
+        public bool Connected => !closed;
         public String Key { get; }
+
+        public bool Open => !closed;
 
         #endregion Public Properties
 
         #region Public Methods
 
+        public void Close() => Dispose();
+
         public void Dispose()
         {
+            connected = false;
+            closed = true;
             serverStream.Dispose();
         }
 
@@ -50,14 +56,17 @@ namespace Interprocomm.Server
         {
             await Task.Run(() =>
             {
+                closed = false;
+                connected = false;
                 serverStream = new NamedPipeServerStream(Key, PipeDirection.InOut);
-                while (true)
+                while (!closed)
                 {
                     try
                     {
                         serverStream.WaitForConnection();
+                        connected = true;
                         ClientConnected?.Invoke();
-                        while (true)
+                        while (!closed)
                         {
                             var bit = (byte)serverStream.ReadByte();
                             var bitSize = new byte[4];
@@ -71,18 +80,26 @@ namespace Interprocomm.Server
                             if (req.response != null)
                             {
                                 var respBitSize = BitConverter.GetBytes(req.response.Length);
+                                serverStream.Write(new byte[] { 0 }, 0, 1);
                                 serverStream.Write(respBitSize, 0, 4);
                                 serverStream.Write(req.response, 0, req.response.Length);
-                                serverStream.Flush();
                             }
+                            else
+                                serverStream.Write(new byte[] { 1 }, 0, 1);
+                            serverStream.Flush();
                         }
                     }
                     catch (IOException)
                     {
                         serverStream.Disconnect();
                         serverStream.Dispose();
+                        connected = false;
                         ClientDisconnected?.Invoke();
                         serverStream = new NamedPipeServerStream(Key, PipeDirection.InOut);
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        ClientDisconnected?.Invoke();
                     }
                 }
             });

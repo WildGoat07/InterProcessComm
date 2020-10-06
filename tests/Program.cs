@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 public class Program
 {
@@ -15,42 +16,33 @@ public class Program
 
     #region Public Methods
 
-    public static void Main()
+    public static async Task Main()
     {
         bool created;
         mutex = new Mutex(true, "interprocomm", out created);
         if (created)
         {
-            var server = new NamedPipeServerStream("interprocomm", PipeDirection.InOut);
-            Console.WriteLine("server app");
-            while (true)
+            var server = new Server("interprocomm");
+            server.ClientDisconnected += () => server.Dispose();
+            server.ClientConnected += () => Console.WriteLine("found client");
+            server.RequestRecieved += r =>
             {
-                try
-                {
-                    server.WaitForConnection();
-                    Console.WriteLine("client connected");
-                    int value = server.ReadByte();
-                    Console.WriteLine("client said : " + value);
-                    server.WriteByte((byte)(value * 2));
-                    server.Flush();
-                    server.Disconnect();
-                }
-                catch (IOException)
-                {
-                    server.Disconnect();
-                    server.Dispose();
-                    server = new NamedPipeServerStream("interprocomm", PipeDirection.InOut);
-                }
-            }
+                Console.WriteLine(r.StringData);
+                r.Respond("res : " + r.StringData);
+            };
+            await server.Start();
         }
         else
         {
-            var client = new NamedPipeClientStream(".", "interprocomm", PipeDirection.InOut);
-            Console.WriteLine("client app");
-            client.Connect();
-            Console.WriteLine("server connected");
-            client.WriteByte(12);
-            client.Flush();
+            var client = new Client("interprocomm");
+            client.Start();
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (input == "exit")
+                    break;
+                Console.WriteLine(client.SendRequest(input)?.StringData);
+            }
         }
     }
 
