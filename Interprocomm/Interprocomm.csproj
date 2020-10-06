@@ -2,6 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <Authors>Nathan HANEN</Authors>
+    <Description>InterProcessComm is a very small and simple wrapper for the NamedPipeServerStream and the NamedPipeClientStream. It allows easy and fast communication between two applications.</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Copyright (c) 2020 Nathan HANEN</Copyright>
+    <PackageProjectUrl>https://github.com/WildGoat07/Interprocomm</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WildGoat07/Interprocomm</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>NamedPipeServerStream NamedPipeClientStream</PackageTags>
+    <PackageId>interprocesscomm</PackageId>
+    <Product>InterProcessComm</Product>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
