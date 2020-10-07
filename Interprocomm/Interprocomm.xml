@@ -47,6 +47,9 @@
             <exception cref="T:System.InvalidOperationException">
             Thrown if calling this when the client is not connected.
             </exception>
+            <exception cref="T:System.IO.IOException">
+            Thrown if the server is closed or the client lost the connection.
+            </exception>
         </member>
         <member name="M:Interprocomm.Client.SendRequest(System.String)">
             <summary>
@@ -113,12 +116,16 @@
             application and send back a response if needed.
             </summary>
         </member>
-        <member name="M:Interprocomm.Server.#ctor(System.String)">
+        <member name="M:Interprocomm.Server.#ctor(System.String,System.Byte)">
             <summary>
             Constructor.
             </summary>
             <param name="key">
             Key used to sync the server and the client. It must match the one used for the client.
+            </param>
+            <param name="serverCount">
+            Number of servers up for a connection (number of clients connected at the same time).
+            When all servers are busy, the next client has to wait before connecting.
             </param>
         </member>
         <member name="E:Interprocomm.Server.ClientConnected">
@@ -138,7 +145,12 @@
         </member>
         <member name="P:Interprocomm.Server.Connected">
             <summary>
-            Returns true if the server is connected with a client.
+            Returns true if the server is connected with at least one client.
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Server.ConnectedClientCount">
+            <summary>
+            Returns the number of connected clients to the server.
             </summary>
         </member>
         <member name="P:Interprocomm.Server.Key">
@@ -149,6 +161,12 @@
         <member name="P:Interprocomm.Server.Open">
             <summary>
             Returns true if the server is started and connected/ready to be connected
+            </summary>
+        </member>
+        <member name="P:Interprocomm.Server.ServerCount">
+            <summary>
+            Returns the number of available servers, or the max number of client connected at the
+            same time
             </summary>
         </member>
         <member name="M:Interprocomm.Server.Close">
