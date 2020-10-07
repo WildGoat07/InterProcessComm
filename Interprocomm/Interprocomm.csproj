@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.1</Version>
+    <Version>0.2.0</Version>
     <Authors>Nathan HANEN</Authors>
     <Description>InterProcessComm is a very small and simple wrapper for the NamedPipeServerStream and the NamedPipeClientStream. It allows easy and fast communication between two applications.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
