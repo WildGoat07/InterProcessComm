@@ -30,7 +30,7 @@ namespace Interprocomm
         #region Public Properties
 
         /// <summary>
-        /// The raw content of the response.
+        /// The raw content of the request.
         /// </summary>
         public byte[] Data => data;
 
